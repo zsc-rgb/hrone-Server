@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.hrone</groupId>
+        <artifactId>hrone-server</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>hrone-admin</artifactId>
+    <packaging>jar</packaging>
+    <description>Web服务入口</description>
+
+    <dependencies>
+        <!-- 依赖框架核心模块（会自动传递其他依赖） -->
+        <dependency>
+            <groupId>com.hrone</groupId>
+            <artifactId>hrone-framework</artifactId>
+        </dependency>
+
+        <!-- MySQL驱动（暂时排除，后续阶段再启用） -->
+        <!-- <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency> -->
+
+        <!-- Swagger（暂时排除，后续阶段再启用） -->
+        <!-- <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+        </dependency> -->
+
+        <!-- Spring Boot DevTools（热部署） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Spring Boot Maven插件 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.5.14</version>
+                <configuration>
+                    <fork>true</fork>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <finalName>${project.artifactId}</finalName>
+    </build>
+</project>
+
