@@ -40,6 +40,13 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
 
+        <!-- MyBatis-Plus（用于BaseEntity注解） -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-annotation</artifactId>
+            <version>3.4.2</version>
+        </dependency>
+
         <!-- Lombok（简化代码） -->
         <dependency>
             <groupId>org.projectlombok</groupId>

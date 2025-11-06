@@ -5,6 +5,8 @@ import com.hrone.common.core.domain.AjaxResult;
 import com.hrone.common.core.domain.PageDomain;
 import com.hrone.common.core.page.TableDataInfo;
 import com.hrone.common.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -33,6 +35,11 @@ import java.util.List;
  * @author hrone
  */
 public class BaseController {
+    
+    /**
+     * 日志对象
+     */
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
     
     /**
      * 设置请求分页数据

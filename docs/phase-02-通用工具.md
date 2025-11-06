@@ -729,16 +729,165 @@ public class UserController {
 
 ### 2.5 常量定义（预计30分钟）
 
-**待实现：**
-- [ ] Constants - 通用常量
-- [ ] UserConstants - 用户常量
-- [ ] CacheConstants - 缓存常量
+### 已完成 ✅
 
-完成后，第2阶段就全部完成了！
+**实现的类：**
+1. **Constants.java** - 通用常量（158行）
+   - 字符集常量（UTF8、GBK）
+   - 协议常量（HTTP、HTTPS）
+   - 状态码常量（SUCCESS、FAIL）
+   - Token相关常量
+   - 验证码配置常量
+   - 40+个通用常量
+
+2. **UserConstants.java** - 用户常量（137行）
+   - 用户状态常量（USER_NORMAL、USER_DISABLE）
+   - 角色状态常量（ROLE_NORMAL、ROLE_DISABLE）
+   - 菜单类型常量（TYPE_DIR、TYPE_MENU、TYPE_BUTTON）
+   - 长度限制常量（用户名、密码长度）
+   - 超级管理员ID（ADMIN_ID）
+   - 30+个用户相关常量
+
+3. **CacheConstants.java** - 缓存常量（123行）
+   - 缓存Key前缀（LOGIN_TOKEN_KEY、USER_INFO_KEY等）
+   - 过期时间配置（登录30分钟、验证码2分钟等）
+   - 安全配置（密码错误最大次数等）
+   - 20+个缓存相关常量
+
+4. **ConstantsTestController.java** - 常量测试接口（186行）
+   - 5个测试接口
+   - 演示常量使用方法
+   - 对比魔法值和常量的区别
+
+### 使用示例
+
+**场景1：判断用户状态**
+```java
+// ❌ 使用魔法值（不推荐）
+if ("0".equals(user.getStatus())) {
+    // 正常用户
+}
+
+// ✅ 使用常量（推荐）
+if (UserConstants.USER_NORMAL.equals(user.getStatus())) {
+    // 正常用户
+}
+```
+
+**场景2：生成Redis缓存Key**
+```java
+// ❌ 使用魔法值（不推荐）
+String key = "login_token:" + userId;
+
+// ✅ 使用常量（推荐）
+String key = CacheConstants.LOGIN_TOKEN_KEY + userId;
+```
+
+**场景3：验证用户名长度**
+```java
+// ❌ 使用魔法值（不推荐）
+if (userName.length() < 2 || userName.length() > 20) {
+    throw new ServiceException("用户名长度应在2-20个字符之间");
+}
+
+// ✅ 使用常量（推荐）
+if (userName.length() < UserConstants.USERNAME_MIN_LENGTH 
+    || userName.length() > UserConstants.USERNAME_MAX_LENGTH) {
+    throw new ServiceException("用户名长度应在" + UserConstants.USERNAME_MIN_LENGTH 
+        + "-" + UserConstants.USERNAME_MAX_LENGTH + "个字符之间");
+}
+```
+
+**场景4：判断菜单类型**
+```java
+// ❌ 使用魔法值（不推荐）
+if ("M".equals(menu.getMenuType())) {
+    // 目录
+} else if ("C".equals(menu.getMenuType())) {
+    // 菜单
+} else if ("F".equals(menu.getMenuType())) {
+    // 按钮
+}
+
+// ✅ 使用常量（推荐）
+if (UserConstants.TYPE_DIR.equals(menu.getMenuType())) {
+    // 目录
+} else if (UserConstants.TYPE_MENU.equals(menu.getMenuType())) {
+    // 菜单
+} else if (UserConstants.TYPE_BUTTON.equals(menu.getMenuType())) {
+    // 按钮
+}
+```
+
+### 常量类的好处
+
+1. **提高代码可读性**
+   - 一眼就能看懂常量的含义
+   - 不需要注释说明
+
+2. **便于维护**
+   - 修改常量值只需改一处
+   - 避免漏改导致的bug
+
+3. **IDE支持**
+   - 自动提示常量列表
+   - 自动import
+   - 重构更安全
+
+4. **避免魔法值**
+   - 减少硬编码
+   - 降低出错概率
 
 ---
 
-**下一步：** 实现 2.5 常量定义
+## 🎉 第2阶段100%完成！
 
-阅读详细教程：继续往下看本文档
+### 最终统计
+
+| 子阶段 | 状态 | 文件数 | 代码行数 | 接口数 | 时间 |
+|-------|------|--------|---------|--------|------|
+| 2.1 统一响应 | ✅ | 2 | 449 | 8 | 1小时 |
+| 2.2 基础工具 | ✅ | 4 | 1,356 | 5 | 2小时 |
+| 2.3 通用实体 | ✅ | 5 | 751 | 5 | 1小时 |
+| 2.4 异常处理 | ✅ | 4 | 681 | 8 | 2小时 |
+| 2.5 常量定义 | ✅ | 4 | 604 | 5 | 0.5小时 |
+| 前后端联调 | ✅ | 1 | 60 | - | 1小时 |
+| **第2阶段总计** | **✅** | **20** | **3,901** | **31** | **7.5小时** |
+
+### 成果总览
+
+- ✅ **20个Java类**（3,901行代码）
+- ✅ **31个测试接口**
+- ✅ **30个核心知识点**
+- ✅ **15个文档文件**
+- ✅ **1天完成**（预计1-2天）
+
+---
+
+## 🎊 恭喜你！
+
+**你已经成功完成了第2阶段的学习！**
+
+你现在掌握了：
+- ✅ 统一响应格式设计
+- ✅ 常用工具类实现
+- ✅ 实体类继承体系
+- ✅ 分页功能封装
+- ✅ 全局异常处理
+- ✅ 常量管理规范
+- ✅ 前后端分离架构
+
+**准备好进入第3阶段了吗？** 🚀
+
+---
+
+**下一步：** 阅读 `docs/phase-03-数据访问.md` 开始第3阶段学习
+
+**预告第3阶段：**
+- 集成 MyBatis-Plus
+- 配置 Druid 数据源
+- 实现数据库 CRUD 操作
+- 分页查询实战
+
+**加油！** 💪
 

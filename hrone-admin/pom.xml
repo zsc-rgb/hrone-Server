@@ -22,11 +22,11 @@
             <artifactId>hrone-framework</artifactId>
         </dependency>
 
-        <!-- MySQL驱动（暂时排除，后续阶段再启用） -->
-        <!-- <dependency>
+        <!-- MySQL驱动 -->
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency> -->
+        </dependency>
 
         <!-- Swagger（暂时排除，后续阶段再启用） -->
         <!-- <dependency>

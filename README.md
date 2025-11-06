@@ -67,10 +67,11 @@
 - [x] GlobalExceptionHandler - 全局异常处理器
 - [x] ExceptionTestController - 异常测试接口
 
-**2.5 常量定义 (30分钟)**
-- [ ] Constants - 通用常量
-- [ ] CacheConstants - 缓存常量
-- [ ] UserConstants - 用户常量
+**2.5 常量定义 (30分钟)** ✅
+- [x] Constants - 通用常量
+- [x] UserConstants - 用户常量
+- [x] CacheConstants - 缓存常量
+- [x] ConstantsTestController - 常量测试接口
 
 **预计完成时间：** 1-2天
 
@@ -79,21 +80,23 @@
 ### 第3阶段：数据访问层 (hrone-framework)
 **目标：** 集成MyBatis-Plus，实现数据库访问
 
-**3.1 数据源配置 (2小时)**
-- [ ] Druid数据源配置
-- [ ] MyBatis-Plus基础配置
-- [ ] 分页插件配置
+**3.1 数据源配置 (2小时)** ✅
+- [x] Druid数据源配置
+- [x] MyBatis-Plus基础配置
+- [x] 分页插件配置
+- [x] SQL脚本准备
 
-**3.2 代码生成器 (3小时)**
-- [ ] 配置代码生成器
-- [ ] 自动生成Entity、Mapper、Service
-- [ ] 理解MVC分层架构
+**3.2 实体类和Mapper (1小时)** ✅
+- [x] SysUser实体类
+- [x] SysUserMapper接口
+- [x] ISysUserService接口
+- [x] SysUserServiceImpl实现类
 
-**3.3 数据库操作 (2小时)**
-- [ ] 基础CRUD操作
-- [ ] 条件构造器
-- [ ] 分页查询
-- [ ] 多表关联查询
+**3.3 数据库操作 (2小时)** ✅
+- [x] 基础CRUD操作
+- [x] Lambda条件构造器
+- [x] MyBatis-Plus分页查询
+- [x] SysUserController接口（9个接口）
 
 **预计完成时间：** 1天
 
@@ -307,10 +310,13 @@ hrone-Server/
 - ✅ 第2.2阶段：基础工具类
 - ✅ 第2.3阶段：通用实体类
 - ✅ 第2.4阶段：异常处理
-- 🔄 第2.5阶段：常量定义（待开始）
+- ✅ 第2.5阶段：常量定义
+- 🎉 第2阶段：100%完成！
+- ✅ 第3阶段：数据访问层（代码已完成）
+- ⚠️ 需要准备MySQL数据库才能测试
 
 ### 3. 下一步
-阅读 `docs/phase-02-通用工具.md` 继续第二阶段的学习（通用实体类、异常处理、常量定义）
+✅ 第3阶段代码已完成！请先按照 `第3阶段-准备工作.md` 准备MySQL数据库，然后测试接口
 
 ## 📚 学习建议
 
@@ -336,7 +342,9 @@ hrone-Server/
 | 第2.2阶段 | 2025-11-05 | 2025-11-05 | StringUtils、DateUtils、ServletUtils |
 | 第2.3阶段 | 2025-11-05 | 2025-11-05 | BaseEntity、PageDomain、TableDataInfo、BaseController |
 | 第2.4阶段 | 2025-11-05 | 2025-11-05 | BaseException、ServiceException、GlobalExceptionHandler |
-| 第2.5阶段 | - | - | - |
+| 第2.5阶段 | 2025-11-05 | 2025-11-05 | Constants、UserConstants、CacheConstants |
+| **第2阶段** | **2025-11-05** | **2025-11-05** | **✅ 100%完成！** |
+| 第3阶段 | 2025-11-05 | 2025-11-05 | MyBatis-Plus、Druid、CRUD（代码已完成，需MySQL）|
 
 ---
 

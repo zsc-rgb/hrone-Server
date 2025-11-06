@@ -1,5 +1,6 @@
 package com.hrone.common.core.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;
@@ -34,6 +35,7 @@ public class BaseEntity implements Serializable {
      * 搜索值
      * 用于模糊查询，不映射到数据库
      */
+    @TableField(exist = false)
     private String searchValue;
     
     /**
@@ -73,6 +75,7 @@ public class BaseEntity implements Serializable {
      * - 时间范围查询（beginTime、endTime）
      * - 其他动态查询条件
      */
+    @TableField(exist = false)
     private Map<String, Object> params;
     
     /**
