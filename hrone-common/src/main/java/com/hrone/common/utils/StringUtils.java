@@ -343,5 +343,46 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     public static boolean isArray(Object object) {
         return object != null && object.getClass().isArray();
     }
+    
+    /**
+     * 将集合转换为字符串（使用分隔符连接）
+     * 
+     * 使用场景：拼接SQL的IN条件、错误信息等
+     * 
+     * @param collection 集合
+     * @param separator 分隔符
+     * @return 拼接后的字符串
+     * 
+     * 示例：
+     * join(["GET", "POST", "PUT"], ", ") = "GET, POST, PUT"
+     */
+    public static String join(Collection<?> collection, String separator) {
+        if (isEmpty(collection)) {
+            return NULLSTR;
+        }
+        return join(collection.toArray(), separator);
+    }
+    
+    /**
+     * 将数组转换为字符串（使用分隔符连接）
+     * 
+     * @param array 数组
+     * @param separator 分隔符
+     * @return 拼接后的字符串
+     */
+    public static String join(Object[] array, String separator) {
+        if (isEmpty(array)) {
+            return NULLSTR;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < array.length; i++) {
+            if (i > 0) {
+                sb.append(separator);
+            }
+            sb.append(array[i]);
+        }
+        return sb.toString();
+    }
 }
 

@@ -5,8 +5,8 @@
 ## 🎯 总体进度
 
 ```
-进度：█████████░░░░░░░░░░░ 35%
-当前阶段：第2阶段 - 通用工具模块
+进度：██████████░░░░░░░░░░ 45%
+当前阶段：第2阶段 - 通用工具模块（即将完成）
 ```
 
 ---
@@ -124,20 +124,29 @@
 - **BaseController（103行）**：Controller基类，提供getDataTable()等通用方法
 - **PageTestController（208行）**：完整的分页测试接口，包含5个测试场景
 
-#### 2.4 异常处理 ⏳
+#### 2.4 异常处理 ✅
 
-**状态：** 待开始  
-**预计时间：** 2小时
+**状态：** 已完成  
+**预计时间：** 2小时  
+**实际时间：** 2小时  
+**完成日期：** 2025-11-05
 
-- [ ] BaseException - 基础异常类
-- [ ] ServiceException - 业务异常
-- [ ] GlobalExceptionHandler - 全局异常处理器
-- [ ] 测试异常处理
+- [x] BaseException - 基础异常类
+- [x] ServiceException - 业务异常
+- [x] GlobalExceptionHandler - 全局异常处理器
+- [x] ExceptionTestController - 异常测试接口
 
 **学习目标：**
-- 理解异常处理的最佳实践
-- 掌握@ControllerAdvice的使用
-- 学习异常分层设计
+- ✅ 理解异常处理的最佳实践
+- ✅ 掌握@RestControllerAdvice的使用
+- ✅ 学习异常分层设计
+
+**已完成内容：**
+- **BaseException（170行）**：基础异常类，支持模块、错误码、参数等扩展信息
+- **ServiceException（138行）**：业务异常类，简化业务层异常抛出
+- **GlobalExceptionHandler（180行）**：全局异常处理器，统一捕获和处理所有异常
+- **ExceptionTestController（193行）**：异常测试接口，包含8种异常场景测试
+- **StringUtils 扩展**：添加 join() 方法，支持集合和数组拼接
 
 #### 2.5 常量定义 ⏳
 
@@ -261,12 +270,12 @@
 | 第9阶段 | 2-3天 | 未开始 | - |
 
 **总预计时间：** 10-15天  
-**已用时间：** 1天  
-**完成度：** 30%
+**已用时间：** 1.5天  
+**完成度：** 40%
 
 ### 知识点统计
 
-- ✅ **已掌握：** 22个核心知识点
+- ✅ **已掌握：** 28个核心知识点
   - Maven多模块项目
   - Spring Boot基础配置
   - 启动类编写
@@ -289,8 +298,14 @@
   - @JsonFormat日期格式化
   - Serializable序列化
   - 跨域配置（CORS）
+  - 自定义异常设计
+  - @RestControllerAdvice注解
+  - @ExceptionHandler注解
+  - 异常分层架构
+  - 全局异常处理
+  - 异常日志记录
 
-- 🔄 **学习中：** 异常处理、常量定义
+- 🔄 **学习中：** 常量定义（最后一个子阶段）
   
 - ⏸️ **待学习：** 50+个
 
@@ -422,10 +437,26 @@
 - 掌握了前后端分离项目的跨域配置
 - 熟悉了 Vite 的代理配置
 
+- 完成第2.4阶段：异常处理
+  - 实现 BaseException（基础异常类）
+  - 实现 ServiceException（业务异常类）
+  - 实现 GlobalExceptionHandler（全局异常处理器）
+  - 创建 ExceptionTestController（异常测试接口）
+  - 扩展 StringUtils 添加 join() 方法
+
+**学习时长：** 2小时
+
+**收获：**
+- 掌握了全局异常处理的设计和实现
+- 理解了 @RestControllerAdvice 和 @ExceptionHandler 的使用
+- 学会了异常分层架构（BaseException → ServiceException）
+- 理解了运行时异常的处理策略
+- 掌握了异常日志的记录方式
+- 理解了为什么不在Controller层catch异常
+
 **明天计划：**
-- 继续第2阶段学习
-- 实现异常处理体系（GlobalExceptionHandler）
-- 定义项目常量
+- 完成第2.5阶段：常量定义
+- 完成整个第2阶段
 - 开始第3阶段：数据访问层
 
 ---

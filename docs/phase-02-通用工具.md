@@ -548,5 +548,197 @@ return AjaxResult.success()
 
 **下一步：** 继续实现 2.2 基础工具类
 
+---
+
+## 📝 2.2 基础工具类
+
+### 已完成 ✅
+
+**实现的工具类：**
+1. **StringUtils.java** - 字符串工具类（388行）
+   - 继承 Apache Commons Lang3 的 StringUtils
+   - 添加 format() 占位符替换方法
+   - 添加 toUnderScoreCase() 驼峰转下划线
+   - 添加 join() 集合拼接方法
+   - 支持集合、Map、数组的判空
+
+2. **DateUtils.java** - 日期工具类（436行）
+   - 使用 Java 8 的 LocalDateTime API
+   - 提供 Date 与 LocalDateTime 互转
+   - 统一日期格式常量
+   - 提供日期计算方法
+
+3. **ServletUtils.java** - Servlet工具类（343行）
+   - 使用 RequestContextHolder 获取上下文
+   - 提供Request/Response获取方法
+   - 提供参数获取和类型转换
+   - 提供客户端IP获取（支持代理）
+
+详细使用说明请查看：`第2阶段-快速测试.md`
+
+---
+
+## 📝 2.3 通用实体类
+
+### 已完成 ✅
+
+**实现的类：**
+1. **BaseEntity.java** - 基础实体类（174行）
+   - 所有实体类的父类
+   - 包含通用字段：createBy、createTime、updateBy、updateTime、remark
+   - 使用 @JsonFormat 统一日期格式
+   - 实现 Serializable 支持序列化
+
+2. **PageDomain.java** - 分页参数（144行）
+   - pageNum：当前页码
+   - pageSize：每页大小
+   - orderByColumn：排序字段
+   - isAsc：排序方式
+
+3. **TableDataInfo.java** - 分页响应（122行）
+   - total：总记录数
+   - rows：数据列表
+   - code、msg：状态信息
+
+4. **BaseController.java** - Controller基类（103行）
+   - 提供 getDataTable() 方法
+   - 提供 toAjax() 方法
+   - 所有Controller继承此类
+
+5. **PageTestController.java** - 分页测试接口（208行）
+   - 5个分页测试场景
+   - 演示 BaseEntity 的使用
+
+详细使用说明请查看：`第2.3阶段-通用实体类测试.md`
+
+---
+
+## 📝 2.4 异常处理
+
+### 已完成 ✅
+
+**实现的类：**
+1. **BaseException.java** - 基础异常类（185行）
+   - 所有自定义异常的父类
+   - 支持模块、错误码、参数等扩展信息
+   - 继承 RuntimeException
+
+2. **ServiceException.java** - 业务异常（149行）
+   - 用于业务逻辑中的可预见异常
+   - 支持错误码和详细错误信息
+   - 简化异常抛出
+
+3. **GlobalExceptionHandler.java** - 全局异常处理器（173行）
+   - 使用 @RestControllerAdvice 注解
+   - 捕获所有Controller抛出的异常
+   - 统一转换为 AjaxResult 响应
+   - 记录异常日志
+
+4. **ExceptionTestController.java** - 异常测试接口（201行）
+   - 8种异常场景测试
+   - 演示业务异常处理
+   - 演示系统异常处理
+
+### 异常处理架构
+
+```java
+// Controller层 - 不需要try-catch
+@GetMapping("/{id}")
+public AjaxResult getUser(@PathVariable Long id) {
+    User user = userService.getUserById(id);
+    if (user == null) {
+        // 直接抛出异常
+        throw new ServiceException("用户不存在", 404);
+    }
+    return AjaxResult.success(user);
+}
+
+// GlobalExceptionHandler - 统一捕获
+@ExceptionHandler(ServiceException.class)
+public AjaxResult handleServiceException(ServiceException e) {
+    log.error("业务异常：{}", e.getMessage());
+    return AjaxResult.error(e.getCode(), e.getMessage());
+}
+```
+
+### 使用示例
+
+**Service层抛出异常：**
+```java
+@Service
+public class UserServiceImpl {
+    
+    public User getUserById(Long id) {
+        if (id == null || id <= 0) {
+            throw new ServiceException("用户ID不能为空", 400);
+        }
+        
+        User user = userMapper.selectById(id);
+        if (user == null) {
+            throw new ServiceException("用户不存在", 404);
+        }
+        
+        return user;
+    }
+}
+```
+
+**Controller层不需要处理：**
+```java
+@RestController
+@RequestMapping("/user")
+public class UserController {
+    
+    @GetMapping("/{id}")
+    public AjaxResult getUser(@PathVariable Long id) {
+        // 异常会自动被 GlobalExceptionHandler 捕获
+        User user = userService.getUserById(id);
+        return AjaxResult.success(user);
+    }
+}
+```
+
+详细使用说明请查看：`第2.4阶段-异常处理测试.md`
+
+---
+
+## 📊 第2阶段总结
+
+### 已完成内容（4/5）
+
+| 子阶段 | 状态 | 文件数 | 代码行数 | 时间 |
+|-------|------|--------|---------|------|
+| 2.1 统一响应结果 | ✅ | 2 | 449 | 1小时 |
+| 2.2 基础工具类 | ✅ | 4 | 1,356 | 2小时 |
+| 2.3 通用实体类 | ✅ | 5 | 751 | 1小时 |
+| 2.4 异常处理 | ✅ | 4 | 681 | 2小时 |
+| 2.5 常量定义 | ⏳ | - | - | 0.5小时 |
+| **合计** | **80%** | **15** | **3,237** | **6.5/7** |
+
+### 测试接口统计
+
+- 统一响应：8个接口
+- 工具类：5个接口
+- 分页：5个接口
+- 异常处理：8个接口
+- **合计：26个测试接口**
+
+---
+
+## 🎯 下一步
+
+### 2.5 常量定义（预计30分钟）
+
+**待实现：**
+- [ ] Constants - 通用常量
+- [ ] UserConstants - 用户常量
+- [ ] CacheConstants - 缓存常量
+
+完成后，第2阶段就全部完成了！
+
+---
+
+**下一步：** 实现 2.5 常量定义
+
 阅读详细教程：继续往下看本文档
 

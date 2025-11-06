@@ -61,10 +61,11 @@
 - [x] BaseController - Controller基类
 - [x] PageTestController - 分页测试接口
 
-**2.4 异常处理 (2小时)**
-- [ ] 自定义异常类体系
-- [ ] 全局异常处理器
-- [ ] 业务异常、服务异常
+**2.4 异常处理 (2小时)** ✅
+- [x] BaseException - 基础异常类
+- [x] ServiceException - 业务异常
+- [x] GlobalExceptionHandler - 全局异常处理器
+- [x] ExceptionTestController - 异常测试接口
 
 **2.5 常量定义 (30分钟)**
 - [ ] Constants - 通用常量
@@ -305,7 +306,8 @@ hrone-Server/
 - ✅ 第2.1阶段：统一响应结果
 - ✅ 第2.2阶段：基础工具类
 - ✅ 第2.3阶段：通用实体类
-- 🔄 第2.4阶段：异常处理（待开始）
+- ✅ 第2.4阶段：异常处理
+- 🔄 第2.5阶段：常量定义（待开始）
 
 ### 3. 下一步
 阅读 `docs/phase-02-通用工具.md` 继续第二阶段的学习（通用实体类、异常处理、常量定义）
@@ -333,7 +335,8 @@ hrone-Server/
 | 第2.1阶段 | 2025-11-05 | 2025-11-05 | 统一响应结果、AjaxResult、HttpStatus |
 | 第2.2阶段 | 2025-11-05 | 2025-11-05 | StringUtils、DateUtils、ServletUtils |
 | 第2.3阶段 | 2025-11-05 | 2025-11-05 | BaseEntity、PageDomain、TableDataInfo、BaseController |
-| 第2.4阶段 | - | - | - |
+| 第2.4阶段 | 2025-11-05 | 2025-11-05 | BaseException、ServiceException、GlobalExceptionHandler |
+| 第2.5阶段 | - | - | - |
 
 ---
 
