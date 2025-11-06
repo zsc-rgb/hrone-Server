@@ -27,11 +27,23 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency> -->
 
-        <!-- Redis（暂时排除，后续阶段再启用） -->
-        <!-- <dependency>
+        <!-- Redis -->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency> -->
+        </dependency>
+        
+        <!-- Redis连接池 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        
+        <!-- Fastjson2 -->
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+        </dependency>
 
         <!-- JWT（暂时排除，后续阶段再启用） -->
         <!-- <dependency>

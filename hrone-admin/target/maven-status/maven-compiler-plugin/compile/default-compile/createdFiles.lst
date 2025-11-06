@@ -1,9 +1,11 @@
 com\hrone\HROneApplication.class
+com\hrone\controller\RedisCacheTestController.class
 com\hrone\controller\PageTestController$3.class
 com\hrone\controller\PageTestController$1.class
 com\hrone\controller\PageTestController$2.class
 com\hrone\controller\PageTestController$TestUser.class
 com\hrone\controller\SysUserController.class
+com\hrone\controller\RedisCacheTestController$UserInfo.class
 com\hrone\controller\ConstantsTestController.class
 com\hrone\controller\PageTestController.class
 com\hrone\controller\UtilsTestController.class
