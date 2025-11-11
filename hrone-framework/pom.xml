@@ -45,11 +45,17 @@
             <artifactId>fastjson2</artifactId>
         </dependency>
 
-        <!-- JWT（暂时排除，后续阶段再启用） -->
-        <!-- <dependency>
+        <!-- AOP（用于权限注解切面） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- JWT -->
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-        </dependency> -->
+        </dependency>
 
         <!-- Druid数据源 -->
         <dependency>

@@ -92,6 +92,13 @@ mybatis-plus:
         # 连接池中的最小空闲连接
         min-idle: 5
 
+# JWT 配置（第6阶段）
+jwt:
+  # 签名密钥（开发环境示例，生产请放入安全配置中心）
+  secret: HROne-Dev-Secret-Key-ChangeMe-For-Production-Use
+  # 过期时间（单位：分钟）
+  expire-minutes: 120
+
 # MyBatis-Plus配置（第3阶段会启用）
 # mybatis-plus:
 #   mapper-locations: classpath*:mapper/**/*Mapper.xml

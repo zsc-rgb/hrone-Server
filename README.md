@@ -149,26 +149,27 @@
 ### 第6阶段：安全认证 (hrone-framework)
 **目标：** 实现JWT登录认证和授权
 
-**6.1 JWT工具类 (2小时)**
-- [ ] JWT生成
-- [ ] JWT解析
-- [ ] JWT验证
+**6.1 JWT工具类 (2小时)** ✅
+- [x] JWT生成（`JwtUtils.generateToken`）
+- [x] JWT解析（`JwtUtils.parseClaims`/`getSubject`）
+- [x] JWT验证（`JwtUtils.validateToken`）
+- [x] 新增示例配置：`application-dev.yml` 下 `jwt.secret`、`jwt.expire-minutes`
 
 **6.2 登录功能 (4小时)**
-- [ ] 登录接口
+- [x] 登录接口 `/auth/login`（简化版）
 - [ ] 验证码生成
-- [ ] 密码验证
-- [ ] Token生成和返回
+- [x] 密码验证（演示为明文，后续切换BCrypt）
+- [x] Token生成和返回（JwtUtils）
 
 **6.3 JWT过滤器 (3小时)**
-- [ ] JwtAuthenticationTokenFilter
-- [ ] Token解析
-- [ ] 用户信息加载
+- [x] JwtAuthenticationTokenFilter（OncePerRequestFilter）
+- [x] Token解析与用户ID注入（request attribute：login_user_key）
+- [x] 白名单放行：/auth/**、/test/**、/druid/**、/actuator/**
 
 **6.4 权限注解 (2小时)**
-- [ ] @RequiresPermissions
-- [ ] @RequiresRoles
-- [ ] 权限验证切面
+- [x] @RequiresPermissions 注解
+- [x] PermissionAspect 切面（从请求头 X-Perms 演示校验）
+- [ ] @RequiresRoles（预留）
 
 **预计完成时间：** 2天
 

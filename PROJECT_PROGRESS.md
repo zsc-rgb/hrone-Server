@@ -1,12 +1,12 @@
 # 📊 HROne 后端项目学习进度
 
-> 最后更新：2025-11-05
+> 最后更新：2025-11-11
 
 ## 🎯 总体进度
 
 ```
-进度：████████████████████ 85%
-当前阶段：第5阶段 - 系统基础模块（代码已完成，需MySQL测试）
+进度：█████████████████████ 88%
+当前阶段：第6阶段 - 安全认证（进行中：6.1 JWT 工具完成）
 ```
 
 ---
@@ -354,16 +354,42 @@
 
 ---
 
-### 第6阶段：安全认证 ⏸️
+### 第6阶段：安全认证 ✅/进行中
 
-**预计开始：** 2025-11-08  
-**预计完成：** 2025-11-09
+**开始时间：** 2025-11-11  
+**当前进度：** 6.1 已完成；6.2 登录接口完成（待验证码）；6.3 过滤器完成；6.4 权限注解完成（演示版）
 
-**内容预览：**
-- JWT工具类
-- 登录功能
-- Token验证
-- 权限注解
+#### 6.1 JWT工具类 ✅
+**状态：** 已完成  
+**实际时间：** 1小时  
+
+- [x] 添加 `jjwt` 依赖（父POM已管理版本）
+- [x] 在 `hrone-framework` 新增 `JwtUtils`（生成/解析/验证）
+- [x] 在 `application-dev.yml` 增加 `jwt.secret` 与 `jwt.expire-minutes` 示例配置
+
+**收获：**
+- 了解 JWT 的结构（Header.Payload.Signature）
+- 掌握 HS256 签名生成与验证
+- 学会通过 Claims 读取主体与自定义字段
+
+#### 6.2 登录功能（部分完成） ✅
+**状态：** 已完成登录接口、密码校验、颁发Token；验证码待做  
+**耗时：** 1小时
+
+- [x] 创建 `AuthController`，新增 `/auth/login` 接口
+- [x] 支持从 `application-dev.yml` 读取 `jwt.secret`、`jwt.expire-minutes`
+- [x] 明文密码校验（演示用，后续切换为加密存储与BCrypt校验）
+- [x] 返回 `token`、`expireMinutes`、`userId`、`userName` 等
+
+#### 6.3 JWT过滤器 ✅
+- [x] OncePerRequestFilter 实现，白名单放行
+- [x] 校验Token并注入 userId（request attribute：login_user_key）
+- [x] 无效或缺失 Token 返回 401
+
+#### 6.4 权限注解（演示版） ✅
+- [x] `@RequiresPermissions` 注解
+- [x] `PermissionAspect`：从请求头 `X-Perms` 读取权限并校验
+- [ ] 结合数据库动态权限（待第7阶段完善）
 
 ---
 

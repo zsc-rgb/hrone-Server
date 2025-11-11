@@ -26,6 +26,7 @@ public class HROneApplication {
             "   访问地址：http://localhost:8080\n" +
             "   测试接口：http://localhost:8080/test/hello\n" +
             "========================================\n");
+
     }
 }
 

@@ -1,4 +1,16 @@
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\mapper\SysMenuMapper.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\impl\SysDeptServiceImpl.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\ISysMenuService.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\domain\SysDept.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\ISysUserService.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\domain\SysRole.java
 D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\domain\SysUser.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\impl\SysRoleServiceImpl.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\ISysDeptService.java
 D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\impl\SysUserServiceImpl.java
 D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\mapper\SysUserMapper.java
-D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\ISysUserService.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\mapper\SysDeptMapper.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\impl\SysMenuServiceImpl.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\domain\SysMenu.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\mapper\SysRoleMapper.java
+D:\HroneWorking\hrone-Server\hrone-system\src\main\java\com\hrone\system\service\ISysRoleService.java
