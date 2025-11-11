@@ -71,18 +71,11 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
     }
 
     /**
-     * 根据用户ID查询菜单（简化版本）
+     * 根据用户ID查询菜单（基于用户-角色-菜单关系）
      */
     @Override
     public List<SysMenu> selectMenusByUserId(Long userId) {
-        // TODO: 实际需要通过 sys_user_role 和 sys_role_menu 关联查询
-        // 这里暂时返回所有菜单
-        LambdaQueryWrapper<SysMenu> wrapper = new LambdaQueryWrapper<>();
-        wrapper.in(SysMenu::getMenuType, UserConstants.TYPE_DIR, UserConstants.TYPE_MENU);
-        wrapper.eq(SysMenu::getStatus, UserConstants.MENU_NORMAL);
-        wrapper.orderByAsc(SysMenu::getParentId, SysMenu::getOrderNum);
-        
-        return menuMapper.selectList(wrapper);
+        return menuMapper.selectMenusByUserId(userId);
     }
 
     /**
