@@ -107,6 +107,88 @@ CREATE TABLE `sys_role_dept` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='角色和部门关联表';
 
 -- ==========================================
+-- 8. 字典类型表
+-- ==========================================
+DROP TABLE IF EXISTS `sys_dict_type`;
+CREATE TABLE `sys_dict_type` (
+  `dict_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
+  `dict_name` VARCHAR(100) NOT NULL COMMENT '字典名称',
+  `dict_type` VARCHAR(100) NOT NULL COMMENT '字典类型',
+  `status` CHAR(1) DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `remark` VARCHAR(500) DEFAULT '' COMMENT '备注',
+  `create_by` VARCHAR(64) DEFAULT '' COMMENT '创建者',
+  `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` VARCHAR(64) DEFAULT '' COMMENT '更新者',
+  `update_time` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `del_flag` CHAR(1) DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+  PRIMARY KEY (`dict_id`),
+  UNIQUE KEY `uk_dict_type` (`dict_type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典类型表';
+
+-- ==========================================
+-- 9. 字典数据表
+-- ==========================================
+DROP TABLE IF EXISTS `sys_dict_data`;
+CREATE TABLE `sys_dict_data` (
+  `dict_code` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '字典编码',
+  `dict_sort` INT(4) DEFAULT 0 COMMENT '字典排序',
+  `dict_label` VARCHAR(100) DEFAULT '' COMMENT '字典标签',
+  `dict_value` VARCHAR(100) DEFAULT '' COMMENT '字典键值',
+  `dict_type` VARCHAR(100) DEFAULT '' COMMENT '字典类型',
+  `css_class` VARCHAR(100) DEFAULT NULL COMMENT '样式属性（其他样式扩展）',
+  `list_class` VARCHAR(100) DEFAULT NULL COMMENT '表格回显样式',
+  `is_default` CHAR(1) DEFAULT 'N' COMMENT '是否默认（Y是 N否）',
+  `status` CHAR(1) DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `create_by` VARCHAR(64) DEFAULT '' COMMENT '创建者',
+  `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_by` VARCHAR(64) DEFAULT '' COMMENT '更新者',
+  `update_time` DATETIME DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `remark` VARCHAR(500) DEFAULT '' COMMENT '备注',
+  `del_flag` CHAR(1) DEFAULT '0' COMMENT '删除标志（0存在 2删除）',
+  PRIMARY KEY (`dict_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='字典数据表';
+
+-- ==========================================
+-- 10. 操作日志表
+-- ==========================================
+DROP TABLE IF EXISTS `sys_oper_log`;
+CREATE TABLE `sys_oper_log` (
+  `oper_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '日志主键',
+  `title` VARCHAR(50) DEFAULT '' COMMENT '模块标题',
+  `business_type` INT(2) DEFAULT 0 COMMENT '业务类型（0其它 1新增 2修改 3删除）',
+  `method` VARCHAR(200) DEFAULT '' COMMENT '方法名称',
+  `request_method` VARCHAR(10) DEFAULT '' COMMENT '请求方式',
+  `operator_type` INT(1) DEFAULT 0 COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
+  `oper_name` VARCHAR(50) DEFAULT '' COMMENT '操作人员',
+  `oper_url` VARCHAR(255) DEFAULT '' COMMENT '请求URL',
+  `oper_ip` VARCHAR(50) DEFAULT '' COMMENT '主机地址',
+  `oper_location` VARCHAR(255) DEFAULT '' COMMENT '操作地点',
+  `oper_param` VARCHAR(2000) DEFAULT '' COMMENT '请求参数',
+  `json_result` VARCHAR(2000) DEFAULT '' COMMENT '返回参数',
+  `status` INT(1) DEFAULT 0 COMMENT '操作状态（0正常 1异常）',
+  `error_msg` VARCHAR(2000) DEFAULT '' COMMENT '错误消息',
+  `oper_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '操作时间',
+  PRIMARY KEY (`oper_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='操作日志记录';
+
+-- ==========================================
+-- 11. 登录日志表
+-- ==========================================
+DROP TABLE IF EXISTS `sys_login_log`;
+CREATE TABLE `sys_login_log` (
+  `info_id` BIGINT(20) NOT NULL AUTO_INCREMENT COMMENT '访问ID',
+  `user_name` VARCHAR(50) DEFAULT '' COMMENT '用户账号',
+  `ipaddr` VARCHAR(50) DEFAULT '' COMMENT '登录IP地址',
+  `login_location` VARCHAR(255) DEFAULT '' COMMENT '登录地点',
+  `browser` VARCHAR(50) DEFAULT '' COMMENT '浏览器类型',
+  `os` VARCHAR(50) DEFAULT '' COMMENT '操作系统',
+  `status` CHAR(1) DEFAULT '0' COMMENT '登录状态（0成功 1失败）',
+  `msg` VARCHAR(255) DEFAULT '' COMMENT '提示消息',
+  `login_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '访问时间',
+  PRIMARY KEY (`info_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='系统访问记录';
+
+-- ==========================================
 -- 7. 更新用户表（添加部门字段）
 -- ==========================================
 -- 检查列是否存在，如果不存在则添加
@@ -179,6 +261,21 @@ INSERT INTO `sys_role_menu` VALUES
 (1, 100), (1, 101), (1, 102), (1, 103),
 (1, 1000), (1, 1001), (1, 1002), (1, 1003),
 (1, 1010), (1, 1011), (1, 1012), (1, 1013);
+
+-- 初始化字典类型
+INSERT INTO `sys_dict_type` (`dict_name`, `dict_type`, `status`, `remark`) VALUES
+('用户性别', 'sys_user_sex', '0', '用户性别列表'),
+('系统开关', 'sys_normal_disable', '0', '系统开启/关闭状态'),
+('通知类型', 'sys_notice_type', '0', '通知类型');
+
+-- 初始化字典数据
+INSERT INTO `sys_dict_data` (`dict_sort`, `dict_label`, `dict_value`, `dict_type`, `is_default`, `status`, `remark`) VALUES
+(1, '男', '0', 'sys_user_sex', 'Y', '0', '性别男'),
+(2, '女', '1', 'sys_user_sex', 'N', '0', '性别女'),
+(1, '正常', '0', 'sys_normal_disable', 'Y', '0', '状态正常'),
+(2, '停用', '1', 'sys_normal_disable', 'N', '0', '状态停用'),
+(1, '通知', '1', 'sys_notice_type', 'Y', '0', '通知'),
+(2, '公告', '2', 'sys_notice_type', 'N', '0', '公告');
 
 -- ==========================================
 -- 完成

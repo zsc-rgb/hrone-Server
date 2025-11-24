@@ -2,10 +2,12 @@ package com.hrone.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hrone.common.annotation.OperLog;
 import com.hrone.common.core.controller.BaseController;
 import com.hrone.common.core.domain.AjaxResult;
 import com.hrone.common.core.page.TableDataInfo;
 import com.hrone.common.exception.ServiceException;
+import com.hrone.common.enums.BusinessType;
 import com.hrone.system.domain.SysUser;
 import com.hrone.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +118,7 @@ public class SysUserController extends BaseController {
      *   "password": "123456"
      * }
      */
+    @OperLog(title = "用户管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysUser user) {
         int rows = userService.insertUser(user);
@@ -134,6 +137,7 @@ public class SysUserController extends BaseController {
      *   "email": "newemail@hrone.com"
      * }
      */
+    @OperLog(title = "用户管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysUser user) {
         int rows = userService.updateUser(user);
@@ -145,6 +149,7 @@ public class SysUserController extends BaseController {
      * 
      * 访问地址：DELETE http://localhost:8080/system/user/2
      */
+    @OperLog(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{userId}")
     public AjaxResult remove(@PathVariable Long userId) {
         int rows = userService.deleteUserById(userId);
@@ -161,6 +166,7 @@ public class SysUserController extends BaseController {
      *   "userIds": [2, 3, 4]
      * }
      */
+    @OperLog(title = "用户管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/batch")
     public AjaxResult removeBatch(@RequestBody Long[] userIds) {
         int successCount = 0;

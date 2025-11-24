@@ -3,12 +3,16 @@ package com.hrone.controller;
 import com.hrone.common.core.domain.AjaxResult;
 import com.hrone.common.exception.ServiceException;
 import com.hrone.common.utils.StringUtils;
+import com.hrone.common.utils.ServletUtils;
+import com.hrone.common.enums.LoginStatus;
 import com.hrone.framework.security.jwt.JwtUtils;
 import com.hrone.common.constant.CacheConstants;
 import com.hrone.common.constant.Constants;
 import com.hrone.common.utils.RedisCache;
 import com.hrone.system.domain.SysUser;
 import com.hrone.system.service.ISysUserService;
+import com.hrone.system.domain.SysLoginLog;
+import com.hrone.system.service.ISysLoginLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.util.Date;
 
 /**
  * 认证控制器（第6阶段 - 6.2 登录功能）
@@ -40,6 +45,9 @@ public class AuthController {
 	@Autowired
 	private RedisCache redisCache;
 
+	@Autowired
+	private ISysLoginLogService loginLogService;
+
 	@Value("${jwt.secret:HROne-Dev-Secret-Key-ChangeMe-For-Production-Use}")
 	private String jwtSecret;
 
@@ -48,47 +56,57 @@ public class AuthController {
 
 	@PostMapping("/login")
 	public AjaxResult login(@RequestBody LoginBody body) {
-		if (body == null || StringUtils.isEmpty(body.getUsername()) || StringUtils.isEmpty(body.getPassword())) {
-			throw new ServiceException("用户名或密码不能为空", 400);
-		}
-		// 验证码校验（开启）
-		if (StringUtils.isEmpty(body.getCaptchaUuid()) || StringUtils.isEmpty(body.getCaptchaCode())) {
-			throw new ServiceException("验证码不能为空", 400);
-		}
-		String redisKey = CacheConstants.CAPTCHA_CODE_KEY + body.getCaptchaUuid();
-		String cached = redisCache.get(redisKey);
-		if (cached == null) {
-			throw new ServiceException("验证码已过期", 400);
-		}
-		if (!cached.equalsIgnoreCase(body.getCaptchaCode())) {
-			throw new ServiceException("验证码错误", 400);
-		}
-		redisCache.delete(redisKey);
+		String username = body != null ? body.getUsername() : null;
+		try {
+			if (body == null || StringUtils.isEmpty(body.getUsername()) || StringUtils.isEmpty(body.getPassword())) {
+				throw new ServiceException("用户名或密码不能为空", 400);
+			}
+			// 验证码校验（开启）
+			if (StringUtils.isEmpty(body.getCaptchaUuid()) || StringUtils.isEmpty(body.getCaptchaCode())) {
+				throw new ServiceException("验证码不能为空", 400);
+			}
+			String redisKey = CacheConstants.CAPTCHA_CODE_KEY + body.getCaptchaUuid();
+			String cached = redisCache.get(redisKey);
+			if (cached == null) {
+				throw new ServiceException("验证码已过期", 400);
+			}
+			if (!cached.equalsIgnoreCase(body.getCaptchaCode())) {
+				throw new ServiceException("验证码错误", 400);
+			}
+			redisCache.delete(redisKey);
 
-		SysUser user = userService.selectUserByUserName(body.getUsername());
-		if (user == null) {
-			throw new ServiceException("用户不存在", 404);
+			SysUser user = userService.selectUserByUserName(body.getUsername());
+			if (user == null) {
+				throw new ServiceException("用户不存在", 404);
+			}
+			if (!"0".equals(user.getStatus())) {
+				throw new ServiceException("用户状态异常，已停用", 403);
+			}
+
+			// 密码校验：兼容明文与BCrypt
+			if (!passwordMatches(body.getPassword(), user.getPassword())) {
+				throw new ServiceException("用户名或密码错误", 401);
+			}
+
+			long expireMs = TimeUnit.MINUTES.toMillis(jwtExpireMinutes);
+			String token = JwtUtils.generateToken(String.valueOf(user.getUserId()), null, jwtSecret, expireMs);
+
+			Map<String, Object> data = new HashMap<>();
+			data.put("token", token);
+			data.put("expireMinutes", jwtExpireMinutes);
+			data.put("userId", user.getUserId());
+			data.put("userName", user.getUserName());
+			data.put("nickName", user.getNickName());
+
+			recordLogin(username, LoginStatus.SUCCESS, "登录成功");
+			return AjaxResult.success("登录成功").put("data", data);
+		} catch (ServiceException e) {
+			recordLogin(username, LoginStatus.FAIL, e.getMessage());
+			throw e;
+		} catch (RuntimeException e) {
+			recordLogin(username, LoginStatus.FAIL, e.getMessage());
+			throw e;
 		}
-		if (!"0".equals(user.getStatus())) {
-			throw new ServiceException("用户状态异常，已停用", 403);
-		}
-
-		// 密码校验：兼容明文与BCrypt
-		if (!passwordMatches(body.getPassword(), user.getPassword())) {
-			throw new ServiceException("用户名或密码错误", 401);
-		}
-
-		long expireMs = TimeUnit.MINUTES.toMillis(jwtExpireMinutes);
-		String token = JwtUtils.generateToken(String.valueOf(user.getUserId()), null, jwtSecret, expireMs);
-
-		Map<String, Object> data = new HashMap<>();
-		data.put("token", token);
-		data.put("expireMinutes", jwtExpireMinutes);
-		data.put("userId", user.getUserId());
-		data.put("userName", user.getUserName());
-		data.put("nickName", user.getNickName());
-
-		return AjaxResult.success("登录成功").put("data", data);
 	}
 
 	/**
@@ -121,6 +139,19 @@ public class AuthController {
 			return new BCryptPasswordEncoder().matches(raw, stored);
 		}
 		return raw != null && raw.equals(stored);
+	}
+
+	private void recordLogin(String username, LoginStatus status, String message) {
+		SysLoginLog log = new SysLoginLog();
+		log.setUserName(StringUtils.isNotEmpty(username) ? username : "anonymous");
+		log.setStatus(status.name());
+		log.setMsg(message);
+		log.setLoginTime(new Date());
+		if (ServletUtils.getRequest() != null) {
+			log.setIpaddr(ServletUtils.getRequest().getRemoteAddr());
+			log.setLoginLocation(ServletUtils.getRequest().getRequestURI());
+		}
+		loginLogService.insertLoginLog(log);
 	}
 
 	/**

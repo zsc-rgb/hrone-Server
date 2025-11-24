@@ -2,9 +2,11 @@ package com.hrone.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.hrone.common.annotation.OperLog;
 import com.hrone.common.core.controller.BaseController;
 import com.hrone.common.core.domain.AjaxResult;
 import com.hrone.common.core.page.TableDataInfo;
+import com.hrone.common.enums.BusinessType;
 import com.hrone.system.domain.SysRole;
 import com.hrone.system.service.ISysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,7 @@ public class SysRoleController extends BaseController {
      * 
      * POST /system/role
      */
+    @OperLog(title = "角色管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysRole role) {
         return toAjax(roleService.insertRole(role));
@@ -77,6 +80,7 @@ public class SysRoleController extends BaseController {
      * 
      * PUT /system/role
      */
+    @OperLog(title = "角色管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysRole role) {
         return toAjax(roleService.updateRole(role));
@@ -87,6 +91,7 @@ public class SysRoleController extends BaseController {
      * 
      * DELETE /system/role/{roleId}
      */
+    @OperLog(title = "角色管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{roleId}")
     public AjaxResult remove(@PathVariable Long roleId) {
         return toAjax(roleService.deleteRoleById(roleId));
@@ -97,6 +102,7 @@ public class SysRoleController extends BaseController {
      * 
      * DELETE /system/role/batch
      */
+    @OperLog(title = "角色管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/batch")
     public AjaxResult removeBatch(@RequestBody Long[] roleIds) {
         return toAjax(roleService.deleteRoleByIds(roleIds));

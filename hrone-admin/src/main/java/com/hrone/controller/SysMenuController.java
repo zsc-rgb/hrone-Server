@@ -1,7 +1,9 @@
 package com.hrone.controller;
 
+import com.hrone.common.annotation.OperLog;
 import com.hrone.common.core.controller.BaseController;
 import com.hrone.common.core.domain.AjaxResult;
+import com.hrone.common.enums.BusinessType;
 import com.hrone.system.domain.SysMenu;
 import com.hrone.system.service.ISysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +62,7 @@ public class SysMenuController extends BaseController {
      * 
      * POST /system/menu
      */
+    @OperLog(title = "菜单管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysMenu menu) {
         return toAjax(menuService.insertMenu(menu));
@@ -70,6 +73,7 @@ public class SysMenuController extends BaseController {
      * 
      * PUT /system/menu
      */
+    @OperLog(title = "菜单管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysMenu menu) {
         return toAjax(menuService.updateMenu(menu));
@@ -80,6 +84,7 @@ public class SysMenuController extends BaseController {
      * 
      * DELETE /system/menu/{menuId}
      */
+    @OperLog(title = "菜单管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{menuId}")
     public AjaxResult remove(@PathVariable Long menuId) {
         return toAjax(menuService.deleteMenuById(menuId));

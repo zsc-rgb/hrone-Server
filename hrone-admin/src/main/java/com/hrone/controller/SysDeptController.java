@@ -1,7 +1,9 @@
 package com.hrone.controller;
 
+import com.hrone.common.annotation.OperLog;
 import com.hrone.common.core.controller.BaseController;
 import com.hrone.common.core.domain.AjaxResult;
+import com.hrone.common.enums.BusinessType;
 import com.hrone.system.domain.SysDept;
 import com.hrone.system.service.ISysDeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +62,7 @@ public class SysDeptController extends BaseController {
      * 
      * POST /system/dept
      */
+    @OperLog(title = "部门管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody SysDept dept) {
         return toAjax(deptService.insertDept(dept));
@@ -70,6 +73,7 @@ public class SysDeptController extends BaseController {
      * 
      * PUT /system/dept
      */
+    @OperLog(title = "部门管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody SysDept dept) {
         return toAjax(deptService.updateDept(dept));
@@ -80,6 +84,7 @@ public class SysDeptController extends BaseController {
      * 
      * DELETE /system/dept/{deptId}
      */
+    @OperLog(title = "部门管理", businessType = BusinessType.DELETE)
     @DeleteMapping("/{deptId}")
     public AjaxResult remove(@PathVariable Long deptId) {
         return toAjax(deptService.deleteDeptById(deptId));

@@ -99,6 +99,11 @@ jwt:
   # 过期时间（单位：分钟）
   expire-minutes: 120
 
+# 第8阶段：文件上传目录
+hrone:
+  file:
+    upload-dir: uploads
+
 # MyBatis-Plus配置（第3阶段会启用）
 # mybatis-plus:
 #   mapper-locations: classpath*:mapper/**/*Mapper.xml
