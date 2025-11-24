@@ -168,14 +168,14 @@
 
 **6.4 权限注解 (2小时)**
 - [x] @RequiresPermissions 注解
-- [x] PermissionAspect 切面（从请求头 X-Perms 演示校验）
+- [x] PermissionAspect 切面（与 JWT 登录上下文联动，第7阶段已升级为真实 RBAC 校验）
 - [ ] @RequiresRoles（预留）
 
 **预计完成时间：** 2天
 
 ---
 
-### 第7阶段：权限系统 (hrone-framework)
+### 第7阶段：权限系统 (hrone-framework) ✅
 **目标：** 实现RBAC权限控制
 
 **7.1 权限设计 (1小时)**
@@ -188,8 +188,14 @@
 
 **7.3 权限验证 (2小时)**
 - [x] 接口权限验证（@RequiresPermissions + PermissionAspect）
-- [x] 数据权限过滤（@DataScope + DataScopeAspect，支持“全部/本部门”演示）
-- [ ] 按钮权限控制（预告）
+- [x] JWT 过滤器注入登录用户上下文，权限切面基于真实权限集合校验并缓存
+- [x] 移除临时 `X-Perms` 头部回退逻辑
+- [ ] 按钮/角色注解控制（预告）
+
+**7.4 数据权限进阶 (1小时)**
+- [x] `DataScope` 注解 + `DataScopeAspect` 支持全部/自定义/本部门/本部门及以下/仅本人五种范围
+- [x] 新增 `SysRoleDeptMapper`、`DataScopeContext`，`SysUserServiceImpl` 自动拼接过滤条件
+- [x] 结合 `sys_user_role`、`sys_role_dept`、`sys_dept` 树构建真实可见部门集合
 
 **预计完成时间：** 1天
 

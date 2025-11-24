@@ -389,15 +389,15 @@
 
 #### 6.4 权限注解（演示版） ✅
 - [x] `@RequiresPermissions` 注解
-- [x] `PermissionAspect`：从请求头 `X-Perms` 读取权限并校验
-- [ ] 结合数据库动态权限（待第7阶段完善）
+- [x] `PermissionAspect`（第7阶段前为 `X-Perms` 演示模式，已升级为真实权限收敛）
+- [x] 结合数据库动态权限（详见第7阶段）
 
 ---
 
-### 第7阶段：权限系统 ✅/进行中
+### 第7阶段：权限系统 ✅
 
 **开始时间：** 2025-11-11  
-**当前进度：** 完成 7.1 权限设计、7.2 权限查询（演示版）、7.3 接口权限验证；数据权限/按钮权限预告
+**当前进度：** 7.1~7.4 全部完成，权限校验与数据权限已落地为真实 RBAC 流程
 
 #### 7.1 权限设计 ✅
 - [x] 采用 RBAC：用户-角色-菜单-权限
@@ -410,12 +410,16 @@
 #### 7.3 权限验证 ✅
 - [x] 注解 `@RequiresPermissions` + 切面 `PermissionAspect` 实现接口权限验证
 - [x] 过滤器解析 Token，并在 request attribute 注入 `login_user_key`
-- [x] 校验顺序：优先使用登录用户的权限集合，回退到请求头 `X-Perms`（便于快速演示）
- - [x] 数据权限过滤：新增 `@DataScope` 注解与 `DataScopeAspect`，在用户列表查询中演示“全部/本部门”数据范围（基于角色 data_scope 与用户 dept_id）
+- [x] PermissionAspect 仅依赖登录用户的真实权限集合（request 级缓存），移除 `X-Perms` 临时演示通道
 
-后续计划：
-- [ ] 数据权限过滤（基于部门/角色的数据范围）
-- [ ] 结合角色-菜单关联实现真实的按用户权限收敛
+#### 7.4 数据权限过滤（进阶） ✅
+- [x] `DataScopeAspect` 支持 5 种数据范围（全部/自定义/本部门/本部门及以下/仅本人）
+- [x] 新增 `SysRoleDeptMapper` + `SysRoleMapper.selectRolesByUserId`，基于 `sys_user_role`、`sys_role_dept` 计算可见部门
+- [x] `DataScopeContext` 支持“部门集合”与“仅本人”两种模式，`SysUserServiceImpl.selectUserList` 自动拼接查询条件
+
+#### 7.5 权限数据收敛 ✅
+- [x] 真实的用户-角色-菜单-按钮权限链路贯通，`SysMenuService.selectMenusByUserId` 结果用于权限切面
+- [x] 请求作用域缓存用户权限集合，避免同一次请求重复命中数据库
 
 ---
 
@@ -522,6 +526,8 @@
   - RBAC权限模型
   - 用户-角色-菜单关系
   - 数据权限设计
+  - 数据范围实现（全部/自定义/本部门/本部门及以下/仅本人）
+  - 权限切面缓存优化
   - 关联表设计
   - 菜单类型（目录/菜单/按钮）
   - 权限标识（perms）

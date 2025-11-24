@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -26,6 +29,8 @@ import java.util.stream.Collectors;
 @Aspect
 @Component
 public class PermissionAspect {
+
+	private static final String REQUEST_PERMS_KEY = "login_user_perms";
 
 	@Autowired
 	private ISysMenuService menuService;
@@ -42,37 +47,12 @@ public class PermissionAspect {
 			throw new ServiceException("无法获取请求对象，权限校验失败", 500);
 		}
 
-		// 1) 尝试从登录上下文中获取用户ID，并根据用户ID加载权限集合
-		Set<String> have = new HashSet<>();
 		Object uid = request.getAttribute(Constants.LOGIN_USER_KEY);
-		if (uid != null) {
-			try {
-				Long userId = Long.valueOf(String.valueOf(uid));
-				// 简化：当前 ISysMenuService.selectMenusByUserId 返回“所有菜单”（演示阶段）
-				// 我们从菜单中抽取 perms 作为权限集合
-				List<SysMenu> menus = menuService.selectMenusByUserId(userId);
-				have.addAll(menus.stream()
-					.map(SysMenu::getPerms)
-					.filter(StringUtils::isNotEmpty)
-					.flatMap(p -> Arrays.stream(p.split(",")))
-					.map(String::trim)
-					.filter(s -> !s.isEmpty())
-					.collect(Collectors.toSet()));
-			} catch (Exception ignore) {
-				// 忽略异常，回退到 header
-			}
+		if (uid == null) {
+			throw new ServiceException("未认证，无法进行权限校验", 401);
 		}
 
-		// 2) 回退：从请求头 X-Perms 读取权限（用于本地演示或未登录场景）
-		if (have.isEmpty()) {
-			String permsHeader = request.getHeader("X-Perms");
-			if (StringUtils.isNotEmpty(permsHeader)) {
-				have.addAll(Arrays.stream(permsHeader.split(","))
-					.map(String::trim)
-					.filter(s -> !s.isEmpty())
-					.collect(Collectors.toSet()));
-			}
-		}
+		Set<String> have = getOrLoadPermissions(request, uid);
 
 		// 最终校验
 		for (String p : needed) {
@@ -80,6 +60,31 @@ public class PermissionAspect {
 				throw new ServiceException("权限不足（缺少：" + p + "）", 403);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private Set<String> getOrLoadPermissions(HttpServletRequest request, Object uid) {
+		Object cached = request.getAttribute(REQUEST_PERMS_KEY);
+		if (cached instanceof Set) {
+			return (Set<String>) cached;
+		}
+
+		Long userId = Long.valueOf(String.valueOf(uid));
+		Set<String> perms = new HashSet<>();
+		List<SysMenu> menus = menuService.selectMenusByUserId(userId);
+		if (menus != null) {
+			perms.addAll(menus.stream()
+				.map(SysMenu::getPerms)
+				.filter(StringUtils::isNotEmpty)
+				.flatMap(p -> java.util.Arrays.stream(p.split(",")))
+				.map(String::trim)
+				.filter(s -> !s.isEmpty())
+				.collect(Collectors.toSet()));
+		}
+
+		Set<String> immutable = Collections.unmodifiableSet(perms);
+		request.setAttribute(REQUEST_PERMS_KEY, immutable);
+		return immutable;
 	}
 }
 

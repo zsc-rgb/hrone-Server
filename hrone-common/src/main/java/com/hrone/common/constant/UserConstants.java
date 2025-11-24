@@ -153,5 +153,14 @@ public class UserConstants {
      * 超级管理员ID
      */
     public static final Long ADMIN_ID = 1L;
+
+    /**
+     * 数据权限范围
+     */
+    public static final String DATA_SCOPE_ALL = "1";
+    public static final String DATA_SCOPE_CUSTOM = "2";
+    public static final String DATA_SCOPE_DEPT = "3";
+    public static final String DATA_SCOPE_DEPT_AND_CHILD = "4";
+    public static final String DATA_SCOPE_SELF = "5";
 }
 

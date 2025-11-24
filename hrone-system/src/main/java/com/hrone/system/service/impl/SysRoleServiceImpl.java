@@ -55,13 +55,14 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
     }
 
     /**
-     * 根据用户ID查询角色（简化版本，实际需要关联查询）
+     * 根据用户ID查询角色
      */
     @Override
     public List<SysRole> selectRolesByUserId(Long userId) {
-        // TODO: 实际需要通过 sys_user_role 关联表查询
-        // 这里暂时返回所有角色
-        return roleMapper.selectList(null);
+        if (userId == null) {
+            throw new ServiceException("用户ID不能为空", 400);
+        }
+        return roleMapper.selectRolesByUserId(userId);
     }
 
     /**

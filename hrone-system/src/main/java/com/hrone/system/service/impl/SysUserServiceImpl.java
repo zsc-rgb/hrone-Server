@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户Service实现类
@@ -38,7 +39,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * @return 用户列表
      */
     @Override
-    @com.hrone.framework.aspectj.DataScope
+    @com.hrone.system.aspectj.DataScope
     public List<SysUser> selectUserList(SysUser user) {
         LambdaQueryWrapper<SysUser> wrapper = new LambdaQueryWrapper<>();
         
@@ -52,12 +53,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         if (StringUtils.isNotEmpty(user.getStatus())) {
             wrapper.eq(SysUser::getStatus, user.getStatus());
         }
-        // 数据权限：本部门数据（演示）
-        Long scopeDeptId = com.hrone.framework.aspectj.DataScopeContext.getDeptId();
-        if (scopeDeptId != null) {
-            wrapper.eq(SysUser::getDeptId, scopeDeptId);
-        }
         
+        // 数据权限：根据 DataScopeContext 过滤
+        Set<Long> scopeDeptIds = com.hrone.system.aspectj.DataScopeContext.getDeptIds();
+        if (scopeDeptIds != null && !scopeDeptIds.isEmpty()) {
+            wrapper.in(SysUser::getDeptId, scopeDeptIds);
+        } else if (com.hrone.system.aspectj.DataScopeContext.isSelfScope()) {
+            Long selfUserId = com.hrone.system.aspectj.DataScopeContext.getSelfUserId();
+            if (selfUserId != null) {
+                wrapper.eq(SysUser::getUserId, selfUserId);
+            }
+        }
+
         // 排除已删除的数据
         wrapper.eq(SysUser::getDelFlag, "0");
         
